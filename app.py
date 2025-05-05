@@ -212,15 +212,6 @@ with col2:
     plt.tight_layout()
     st.pyplot(fig)
 
-
-# Load the models and preprocessing metadata
-match_model = joblib.load('match_likelihood_random_forest.pkl')
-meeting_model = joblib.load('meeting_likelihood_random_forest.pkl')
-relationship_model = joblib.load('relationship_likelihood_random_forest.pkl')
-
-mlb_classes = joblib.load('interest_tags_classes.pkl')
-model_input_columns = joblib.load('model_input_columns.pkl')
-
 st.title('Dating App Outcome Predictor')
 st.text("This app helps predict one's chances of matching, meeting, and forming a relationship. Fill out the form below to get results.")
 
