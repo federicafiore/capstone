@@ -4,7 +4,7 @@ import pandas as pd
 import joblib
 import matplotlib.pyplot as plt
 
-from train_model import train_all_models
+from model_train import train_all_models
 
 @st.cache_resource #once per session
 def load_models():
