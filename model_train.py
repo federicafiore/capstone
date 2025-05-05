@@ -60,59 +60,59 @@ def train_all_models():
     relationship_model = RandomForestClassifier(class_weight='balanced', random_state=42)
     relationship_model.fit(X_train, y_relationship_train)
     
-    # 5-fold cross-validation for match prediction
-    cv_scores_match = cross_val_score(match_model, X, y_match, cv=5, scoring='accuracy')
-    st.write(f"Match Model - 5-Fold CV Accuracy: {cv_scores_match.mean():.2f} (+/- {cv_scores_match.std():.2f})")
+    # # 5-fold cross-validation for match prediction
+    # cv_scores_match = cross_val_score(match_model, X, y_match, cv=5, scoring='accuracy')
+    # st.write(f"Match Model - 5-Fold CV Accuracy: {cv_scores_match.mean():.2f} (+/- {cv_scores_match.std():.2f})")
     
-    # 5-fold cross-validation for meeting prediction
-    cv_scores_meeting = cross_val_score(meeting_model, X, y_meeting, cv=5, scoring='accuracy')
-    st.write(f"Meeting Model - 5-Fold CV Accuracy: {cv_scores_meeting.mean():.2f} (+/- {cv_scores_meeting.std():.2f})")
+    # # 5-fold cross-validation for meeting prediction
+    # cv_scores_meeting = cross_val_score(meeting_model, X, y_meeting, cv=5, scoring='accuracy')
+    # st.write(f"Meeting Model - 5-Fold CV Accuracy: {cv_scores_meeting.mean():.2f} (+/- {cv_scores_meeting.std():.2f})")
     
-    # 5-fold cross-validation for relationship prediction
-    cv_scores_relationship = cross_val_score(relationship_model, X, y_relationship, cv=5, scoring='accuracy')
-    st.write(f"Relationship Model - 5-Fold CV Accuracy: {cv_scores_relationship.mean():.2f} (+/- {cv_scores_relationship.std():.2f})")
+    # # 5-fold cross-validation for relationship prediction
+    # cv_scores_relationship = cross_val_score(relationship_model, X, y_relationship, cv=5, scoring='accuracy')
+    # st.write(f"Relationship Model - 5-Fold CV Accuracy: {cv_scores_relationship.mean():.2f} (+/- {cv_scores_relationship.std():.2f})")
     
-    y_match_pred = match_model.predict(X_test)
-    y_match_prob = match_model.predict_proba(X_test)[:, 1]
+    # y_match_pred = match_model.predict(X_test)
+    # y_match_prob = match_model.predict_proba(X_test)[:, 1]
     
-    match_accuracy = accuracy_score(y_match_test, y_match_pred)
-    match_precision = precision_score(y_match_test, y_match_pred)
-    match_recall = recall_score(y_match_test, y_match_pred)
-    match_auc = roc_auc_score(y_match_test, y_match_prob)
+    # match_accuracy = accuracy_score(y_match_test, y_match_pred)
+    # match_precision = precision_score(y_match_test, y_match_pred)
+    # match_recall = recall_score(y_match_test, y_match_pred)
+    # match_auc = roc_auc_score(y_match_test, y_match_prob)
     
-    st.write("Match Model Metrics:")
-    st.write(f"Accuracy: {match_accuracy:.2f}")
-    st.write(f"Precision: {match_precision:.2f}")
-    st.write(f"Recall: {match_recall:.2f}")
-    st.write(f"AUC: {match_auc:.2f}")
+    # st.write("Match Model Metrics:")
+    # st.write(f"Accuracy: {match_accuracy:.2f}")
+    # st.write(f"Precision: {match_precision:.2f}")
+    # st.write(f"Recall: {match_recall:.2f}")
+    # st.write(f"AUC: {match_auc:.2f}")
     
-    y_meeting_pred = meeting_model.predict(X_test)
-    y_meeting_prob = meeting_model.predict_proba(X_test)[:, 1]
+    # y_meeting_pred = meeting_model.predict(X_test)
+    # y_meeting_prob = meeting_model.predict_proba(X_test)[:, 1]
     
-    meeting_accuracy = accuracy_score(y_meeting_test, y_meeting_pred)
-    meeting_precision = precision_score(y_meeting_test, y_meeting_pred)
-    meeting_recall = recall_score(y_meeting_test, y_meeting_pred)
-    meeting_auc = roc_auc_score(y_meeting_test, y_meeting_prob)
+    # meeting_accuracy = accuracy_score(y_meeting_test, y_meeting_pred)
+    # meeting_precision = precision_score(y_meeting_test, y_meeting_pred)
+    # meeting_recall = recall_score(y_meeting_test, y_meeting_pred)
+    # meeting_auc = roc_auc_score(y_meeting_test, y_meeting_prob)
     
-    st.write("Meeting Model Metrics:")
-    st.write(f"Accuracy: {meeting_accuracy:.2f}")
-    st.write(f"Precision: {meeting_precision:.2f}")
-    st.write(f"Recall: {meeting_recall:.2f}")
-    st.write(f"AUC: {meeting_auc:.2f}")
+    # st.write("Meeting Model Metrics:")
+    # st.write(f"Accuracy: {meeting_accuracy:.2f}")
+    # st.write(f"Precision: {meeting_precision:.2f}")
+    # st.write(f"Recall: {meeting_recall:.2f}")
+    # st.write(f"AUC: {meeting_auc:.2f}")
     
-    y_relationship_pred = relationship_model.predict(X_test)
-    y_relationship_prob = relationship_model.predict_proba(X_test)[:, 1]
+    # y_relationship_pred = relationship_model.predict(X_test)
+    # y_relationship_prob = relationship_model.predict_proba(X_test)[:, 1]
     
-    relationship_accuracy = accuracy_score(y_relationship_test, y_relationship_pred)
-    relationship_precision = precision_score(y_relationship_test, y_relationship_pred)
-    relationship_recall = recall_score(y_relationship_test, y_relationship_pred)
-    relationship_auc = roc_auc_score(y_relationship_test, y_relationship_prob)
+    # relationship_accuracy = accuracy_score(y_relationship_test, y_relationship_pred)
+    # relationship_precision = precision_score(y_relationship_test, y_relationship_pred)
+    # relationship_recall = recall_score(y_relationship_test, y_relationship_pred)
+    # relationship_auc = roc_auc_score(y_relationship_test, y_relationship_prob)
     
-    st.write("Relationship Model Metrics:")
-    st.write(f"Accuracy: {relationship_accuracy:.2f}")
-    st.write(f"Precision: {relationship_precision:.2f}")
-    st.write(f"Recall: {relationship_recall:.2f}")
-    st.write(f"AUC: {relationship_auc:.2f}")
+    # st.write("Relationship Model Metrics:")
+    # st.write(f"Accuracy: {relationship_accuracy:.2f}")
+    # st.write(f"Precision: {relationship_precision:.2f}")
+    # st.write(f"Recall: {relationship_recall:.2f}")
+    # st.write(f"AUC: {relationship_auc:.2f}")
     
     #losigtic regression, lower accuracy, discarded
     # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
