@@ -8,10 +8,12 @@ from sklearn.ensemble import RandomForestClassifier
 import joblib
 
 #load CSV dataset
-df = pd.read_csv('/Users/effy/Downloads/archive/dating_app_behavior_dataset_extended1.csv')
+df = pd.read_csv('https://github.com/federicafiore/capstone/blob/main/dating_app_behavior_dataset_extended1.csv')
 
+#make mutual matches 1 if it happened, 0 if it didn't (any number greater than 0 would be 1)
 df['mutual_matches'] = df['mutual_matches'].apply(lambda x: 1 if x > 0 else 0)
 
+#columns for dummy
 category_columns = [
     'gender', 'sexual_orientation', 'location_type',
     'education_level', 'swipe_time_of_day',
@@ -20,7 +22,7 @@ category_columns = [
 
 df = pd.get_dummies(df, columns=category_columns)
 
-# Process interest_tags
+# Process interest_tags, separate them as there are three in one cell divided by comma
 df['interest_tags'] = df['interest_tags'].apply(lambda x: [tag.strip() for tag in x.split(',')])
 
 mlb = MultiLabelBinarizer()
@@ -30,13 +32,17 @@ interest_dummies = pd.DataFrame(mlb.fit_transform(df['interest_tags']), columns=
 df = pd.concat([df, interest_dummies], axis=1)
 df.drop('interest_tags', axis=1, inplace=True)
 
+#date happened whether date happened or relationship formed as outcome - assumption
 df['match_outcome_Date Happened'] = df['match_outcome_Date Happened'] | df['match_outcome_Relationship Formed']
 
 # Choose X and Y
 X = df.drop(['mutual_matches','income_bracket','app_usage_time_label','swipe_right_ratio','swipe_right_label','likes_received','bio_length','message_sent_count',	'emoji_usage_rate',	'last_active_hour', 'match_outcome_Blocked', 'match_outcome_Catfished',
     'match_outcome_Chat Ignored', 'match_outcome_Ghosted', 'match_outcome_Instant Match', 'match_outcome_Mutual Match','match_outcome_No Action', 'match_outcome_One-sided Like', 'match_outcome_Date Happened', 'match_outcome_Relationship Formed'], axis=1)
+#outcome for mutual match model
 y_match = df['mutual_matches']
+#outcome for date model
 y_meeting = df['match_outcome_Date Happened']
+#outcome for relationship model
 y_relationship = df['match_outcome_Relationship Formed']
 
 X_train, X_test, y_match_train, y_match_test = train_test_split(X, y_match, test_size=0.2, random_state=42)
@@ -107,6 +113,7 @@ st.write(f"Precision: {relationship_precision:.2f}")
 st.write(f"Recall: {relationship_recall:.2f}")
 st.write(f"AUC: {relationship_auc:.2f}")
 
+#losigtic regression, lower accuracy, discarded
 # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 #
 # # Train
@@ -118,7 +125,7 @@ st.write(f"AUC: {relationship_auc:.2f}")
 # accuracy = accuracy_score(y_test, y_pred)
 # st.write(f"Model Accuracy: {accuracy:.2f}")
 
-# Save test data and predictions for later visualization
+# Save test data and predictions for app
 joblib.dump(y_match_test, 'y_match_test.pkl')
 joblib.dump(y_match_pred, 'y_match_pred.pkl')
 joblib.dump(y_match_prob, 'y_match_prob.pkl')
@@ -130,7 +137,6 @@ joblib.dump(y_meeting_prob, 'y_meeting_prob.pkl')
 joblib.dump(y_relationship_test, 'y_relationship_test.pkl')
 joblib.dump(y_relationship_pred, 'y_relationship_pred.pkl')
 joblib.dump(y_relationship_prob, 'y_relationship_prob.pkl')
-
 
 # Save models
 joblib.dump(match_model, 'match_likelihood_random_forest.pkl')
