@@ -4,6 +4,14 @@ import pandas as pd
 import joblib
 import matplotlib.pyplot as plt
 
+from train_models import train_all_models
+
+@st.cache_resource #once per session
+def load_models():
+    return train_all_models()
+
+match_model, meeting_model, relationship_model, mlb_classes, model_input_columns = load_models()
+
 df = pd.read_csv('https://raw.githubusercontent.com/federicafiore/capstone/main/dating_app_behavior_dataset_extended1.csv')
 
 #for visualization
