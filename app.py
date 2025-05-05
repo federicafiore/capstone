@@ -4,7 +4,7 @@ import pandas as pd
 import joblib
 import matplotlib.pyplot as plt
 
-df = pd.read_csv('https://github.com/federicafiore/capstone/blob/main/dating_app_behavior_dataset_extended1.csv')
+df = pd.read_csv('https://raw.githubusercontent.com/federicafiore/capstone/main/dating_app_behavior_dataset_extended1.csv')
 
 #for visualization
 match_dummies = pd.get_dummies(df['match_outcome'], prefix='match_outcome')
