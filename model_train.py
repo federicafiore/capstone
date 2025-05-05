@@ -8,7 +8,7 @@ from sklearn.ensemble import RandomForestClassifier
 import joblib
 
 #load CSV dataset
-df = pd.read_csv('https://github.com/federicafiore/capstone/blob/main/dating_app_behavior_dataset_extended1.csv')
+df = pd.read_csv('https://raw.githubusercontent.com/federicafiore/capstone/main/dating_app_behavior_dataset_extended1.csv')
 
 #make mutual matches 1 if it happened, 0 if it didn't (any number greater than 0 would be 1)
 df['mutual_matches'] = df['mutual_matches'].apply(lambda x: 1 if x > 0 else 0)
