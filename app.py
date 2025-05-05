@@ -2,29 +2,20 @@ import seaborn as sns
 import streamlit as st
 import pandas as pd
 import joblib
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_curve, RocCurveDisplay
 
-# Define a function for the Dataset Insights Page
-def dataset_insights_page():
-    # Your existing Dataset Insights code here
-    st.title('Dating App Outcome Insights')
-    st.subheader('Dataset Insights')
+df = pd.read_csv('https://github.com/federicafiore/capstone/blob/main/dating_app_behavior_dataset_extended1.csv')
 
-df = pd.read_csv('/Users/effy/Downloads/archive/dating_app_behavior_dataset_extended1.csv')
-
+#for visualization
 match_dummies = pd.get_dummies(df['match_outcome'], prefix='match_outcome')
 
-# Add the dummy columns back to the original DataFrame
+# Add the dummy columns
 df = pd.concat([df, match_dummies], axis=1)
 
-# Create the 'meeting' column as a combination of two dummy flags
+# Create the 'meeting' column as a combination of two 
 df['meeting'] = df['match_outcome_Date Happened'] | df['match_outcome_Relationship Formed']
 
-bins = [17, 24, 34, 44, 54, 64, 120]  # 120 is a safe upper bound for age
+bins = [17, 24, 34, 44, 54, 64, 120]  # 120 upper bound age
 labels = ['18-24', '25-34', '35-44', '45-54', '55-64', '65+']
 df['age_group'] = pd.cut(df['age'], bins=bins, labels=labels)
 
@@ -222,69 +213,6 @@ relationship_model = joblib.load('relationship_likelihood_random_forest.pkl')
 mlb_classes = joblib.load('interest_tags_classes.pkl')
 model_input_columns = joblib.load('model_input_columns.pkl')
 
-st.subheader('Model Insight: Feature Importance (Match Model)')
-
-# # Match Model
-# y_match_test = joblib.load('y_match_test.pkl')
-# y_match_pred = joblib.load('y_match_pred.pkl')
-# y_match_prob = joblib.load('y_match_prob.pkl')
-#
-# # Meeting Model
-# y_meeting_test = joblib.load('y_meeting_test.pkl')
-# y_meeting_pred = joblib.load('y_meeting_pred.pkl')
-# y_meeting_prob = joblib.load('y_meeting_prob.pkl')
-#
-# # Relationship Model
-# y_relationship_test = joblib.load('y_relationship_test.pkl')
-# y_relationship_pred = joblib.load('y_relationship_pred.pkl')
-# y_relationship_prob = joblib.load('y_relationship_prob.pkl')
-#
-# st.subheader('Confusion Matrices')
-#
-# # Match Model
-# cm_match = confusion_matrix(y_match_test, y_match_pred)
-# fig, ax = plt.subplots()
-# ConfusionMatrixDisplay(confusion_matrix=cm_match).plot(ax=ax)
-# plt.title("Confusion Matrix - Match Model")
-# st.pyplot(fig)
-#
-# # Meeting Model
-# cm_meeting = confusion_matrix(y_meeting_test, y_meeting_pred)
-# fig, ax = plt.subplots()
-# ConfusionMatrixDisplay(confusion_matrix=cm_meeting).plot(ax=ax)
-# plt.title("Confusion Matrix - Meeting Model")
-# st.pyplot(fig)
-#
-# # Relationship Model
-# cm_relationship = confusion_matrix(y_relationship_test, y_relationship_pred)
-# fig, ax = plt.subplots()
-# ConfusionMatrixDisplay(confusion_matrix=cm_relationship).plot(ax=ax)
-# plt.title("Confusion Matrix - Relationship Model")
-# st.pyplot(fig)
-#
-# st.subheader('ROC Curves')
-#
-# # Match Model
-# fpr, tpr, _ = roc_curve(y_match_test, y_match_prob)
-# fig, ax = plt.subplots()
-# RocCurveDisplay(fpr=fpr, tpr=tpr).plot(ax=ax)
-# plt.title("ROC Curve - Match Model")
-# st.pyplot(fig)
-#
-# # Meeting Model
-# fpr, tpr, _ = roc_curve(y_meeting_test, y_meeting_prob)
-# fig, ax = plt.subplots()
-# RocCurveDisplay(fpr=fpr, tpr=tpr).plot(ax=ax)
-# plt.title("ROC Curve - Meeting Model")
-# st.pyplot(fig)
-#
-# # Relationship Model
-# fpr, tpr, _ = roc_curve(y_relationship_test, y_relationship_prob)
-# fig, ax = plt.subplots()
-# RocCurveDisplay(fpr=fpr, tpr=tpr).plot(ax=ax)
-# plt.title("ROC Curve - Relationship Model")
-# st.pyplot(fig)
-
 st.title('Dating App Outcome Predictor')
 st.text("This app helps predict one's chances of matching, meeting, and forming a relationship. Fill out the form below to get results.")
 
@@ -334,12 +262,10 @@ with st.form("user_form"):
 
     app_usage_time_min = st.select_slider("How many minutes per day are being allocated into using this app?", options=range(1, 301), value=30)
 
-    submit = st.form_submit_button("Predict")
+    submit = st.form_submit_button("Predict Outcome")
 
 # Run prediction
 if submit:
-
-    #template
     input_dictionary = {
         'age': [age],
         'weight': [weight_kg],
@@ -349,7 +275,7 @@ if submit:
 
     df_input = pd.DataFrame(input_dictionary)
 
-    # One-hot encode the single-choice categorical inputs
+    # One-hot encode
     for col, val in {
         'gender': gender,
         'sexual_orientation': orientation,
@@ -367,12 +293,7 @@ if submit:
     for tag in mlb_classes:  # mlb_classes = list of interest tag columns from training
         df_input[tag] = 1 if tag in interests else 0
 
-    # # Add any missing columns from training
-    # for col in model_input_columns:  # model_input_columns = list of X.columns from training
-    #     if col not in df_input.columns:
-    #         df_input[col] = 0
-
-    # Collect missing columns
+    # Collect missing columns - so it matches expected df and model can work
     missing_cols = {col: 0 for col in model_input_columns if col not in df_input.columns}
 
     # Create a DataFrame with those columns
@@ -390,24 +311,6 @@ if submit:
     meeting_percent = round(meeting_prob * 100, 2)
     relationship_prob = relationship_model.predict_proba(df_input)[0][1]
     relationship_percent = round(relationship_prob * 100, 2)
-
-    # if match_percent >= 50:
-    #     st.success(f"Likely to match with someone: {match_percent}%")
-    #
-    #     if meeting_percent >= 50:
-    #         st.success(f"Likely to meet with someone: {meeting_percent}%")
-    #
-    #         if relationship_percent >= 50:
-    #             st.success(f"Likely to start a relationship: {relationship_percent}%")
-    #
-    #         else:
-    #             st.warning(f"Unlikely to start a relationship: {relationship_percent}%")
-    #
-    #     else:
-    #         st.warning(f"Unlikely to meet with someone: {meeting_percent}%")
-    #
-    # else:
-    #     st.warning(f"Unlikely to match with someone: {match_percent}%")
 
     st.text(f"Chances to match with someone: {match_percent}%")
     st.text(f"Chances to go on a date: {meeting_percent}%")
