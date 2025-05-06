@@ -233,6 +233,7 @@ if mode == "Outcome Predictor":
             height_cm = height
     
         app_usage_time_min = st.select_slider("How many minutes per day are being allocated into using this app?", options=range(1, 301), value=30)
+        profile_pic_count = st.select_slider("How many profile pictures were added?", options=range(1,10),value=3)
     
         submit = st.form_submit_button("Predict Outcome")
     
@@ -243,6 +244,7 @@ if mode == "Outcome Predictor":
             'weight': [weight_kg],
             'height': [height_cm],
             'app_usage_time_min': [app_usage_time_min]
+            'profile_pic_count': [profile_pic_count]
         }
     
         df_input = pd.DataFrame(input_dictionary)
