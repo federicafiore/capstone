@@ -243,7 +243,7 @@ if mode == "Outcome Predictor":
             'age': [age],
             'weight': [weight_kg],
             'height': [height_cm],
-            'app_usage_time_min': [app_usage_time_min]
+            'app_usage_time_min': [app_usage_time_min],
             'profile_pic_count': [profile_pic_count]
         }
     
